@@ -10,7 +10,10 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 // parse application/json
-app.use(bodyParser.json()) ;
+app.use(bodyParser.json());
+
+const smtp_login = process.env.SMTP_LOGIN || '---';
+const smtp_password = process.env.SMTP_PASSWORD || '---';
 
 // create reusable transporter object using the default SMTP transport
 let transporter = nodemailer.createTransport({
@@ -21,8 +24,10 @@ let transporter = nodemailer.createTransport({
 	// requireTLS: true,
 
 	auth: {
-		user: 'alexgoryacko@gmail.com', // generated ethereal user
-		pass: 'testpass322', // generated ethereal password
+		user: smtp_login,
+			// 'alexgoryacko@gmail.com', // generated ethereal user
+		pass: smtp_password
+			// 'testpass322', // generated ethereal password
 	},
 });
 
@@ -55,6 +60,8 @@ text:${text}
 	res.send('ok');
 })
 
-app.listen(port, () => {
+const PORT = process.env.PORT || 3010;
+
+app.listen(PORT, () => {
 	console.log(`Example app listening at http://localhost:${port}`)
 })
